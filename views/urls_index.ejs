@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>TinyApp</title>
+</head>
+<body>
+
+    <% include ./partials/_header.ejs %>
+
+    <table>
+      <% for (let key in urls) { %>
+        <tr>
+          <td>http://localhost:8080/<%= key %></td>
+          <td>(<%= urls[key] %>)</td>
+        </tr>
+        <% } %>
+    </table>
+
+    <h2>Create Short Link</h2>
+    <a href=<%= shortLink %>>Click here!</a>
+</body>
+</html>
