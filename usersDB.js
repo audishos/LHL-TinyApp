@@ -10,13 +10,13 @@ const users = {
     password: "dishwasher-funk"
   },
   getAll: function() {
-    const all = {};
+    const users = {};
     for (key in this) {
       if (typeof this[key] !== 'function') {
-        all[key] = this[key];
+        users[key] = this[key];
       }
     }
-    return all;
+    return users;
   },
   get: function(key) {
     if (this[key]) {
@@ -48,6 +48,15 @@ const users = {
     } else {
       return false;
     }
+  },
+  getByEmail: function(email) {
+    let user = null;
+    for (key in this) {
+      if (this[key].email === email) {
+        user = this[key];
+      }
+    }
+    return user;
   }
 }
 
