@@ -88,10 +88,10 @@ app.get("/u/:shortURL", (req, res) => {
   }
 });
 
-app.post("/login", (req, res) => {
-  res.cookie('username', req.body.username);
-  res.redirect("/urls");
-});
+// app.post("/login", (req, res) => {
+//   res.cookie('username', req.body.username);
+//   res.redirect("/urls");
+// });
 
 app.post("/logout", (req, res) => {
   res.clearCookie('username');
@@ -127,6 +127,29 @@ app.post("/register", (req, res) => {
       }
     } else {
       res.status(400).send("400 - Bad Request. Email is already registered.")
+    }
+  } else {
+    res.status(400).send("400 - Bad Request. You must enter both a username and password.");
+  }
+});
+
+app.get("/login", (req, res) => {
+  res.render("login");
+});
+
+app.post("/login", (req, res) => {
+  if (req.body.email && req.body.password) {
+    const user = usersDB.getByEmail(req.body.email);
+    if (user) {
+      if (user.password === req.body.password) {
+        res.status(200);
+        res.cookie('username', user.id);
+        res.redirect("/urls");
+      } else {
+        res.status(410).send("401 - Login failed");
+      }
+    } else {
+      res.status(404).send("404 - User not found.");
     }
   } else {
     res.status(400).send("400 - Bad Request. You must enter both a username and password.");
