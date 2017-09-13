@@ -2,12 +2,12 @@
   "name": "tinyApp",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "express_server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Audisho Sada",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.1",

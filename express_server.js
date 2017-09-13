@@ -4,22 +4,11 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const methodOverride = require("method-override");
 const cookieParser = require("cookie-parser");
+const generateRandom = require("./generateRandom.js");
 
 // declare constants
 const PORT = process.env.PORT || 8080; // default port 8080
 const SHORTLEN = 6;
-
-// function to generate a randome alphanumeric string
-function generateRandomString(len) {
-  let randString = "";
-  const charset = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-  for (let i = 0; i < len; i++) {
-    randString += charset.charAt(Math.floor(Math.random() * charset.length));
-  }
-
-  return randString;
-}
 
 // our "database"
 var urlDatabase = {
@@ -56,7 +45,7 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.post("/urls", (req, res) => {
-  const newShortURL = generateRandomString(SHORTLEN);
+  const newShortURL = generateRandom.string(SHORTLEN);
   urlDatabase[newShortURL] = req.body.longURL;
   res.redirect(`/urls/${newShortURL}`);
 });
