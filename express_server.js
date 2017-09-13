@@ -31,13 +31,13 @@ app.get("/", (req, res) => {
 app.get("/urls", (req, res) => {
   let templateVars = {
     urls: urlsDB.getAll(),
-    username: req.cookies["username"]
+    user: usersDB.get(req.cookies.username)
   };
   res.render("urls_index", templateVars);
 });
 
 app.get("/urls/new", (req, res) => {
-  let templateVars = { username: req.cookies["username"] };
+  let templateVars = { user: usersDB.get(req.cookies.username) };
   res.render("urls_new", templateVars);
 });
 
@@ -55,7 +55,7 @@ app.get("/urls/:id", (req, res) => {
   let templateVars = {
     shortURL: req.params.id,
     fullURL: urlsDB.get(req.params.id),
-    username: req.cookies["username"]
+    user: usersDB.get(req.cookies.username)
   };
   res.render("urls_show", templateVars);
 });
@@ -104,21 +104,32 @@ app.get("/register", (req, res) => {
 
 app.post("/register", (req, res) => {
   if (req.body.email && req.body.password) {
-    const userID = generateRandom.string(USERIDLEN)
-    const user = {
-      id: userID,
-      email: req.body.email,
-      password: req.body.password
+    const existingUsers = usersDB.getAll();
+    let emailExists = false;
+    for (key in existingUsers) {
+      if (existingUsers[key].email === req.body.email) { // checks if email exists already
+        emailExists = true;
+      }
     }
-    if (usersDB.add(userID, user)) {
-      res.status(201);
-      res.cookie('username', userID);
-      res.redirect("/urls");
+    if (!emailExists) {
+      const userID = generateRandom.string(USERIDLEN)
+      const user = {
+        id: userID,
+        email: req.body.email,
+        password: req.body.password
+      }
+      if (usersDB.add(userID, user)) {
+        res.status(201);
+        res.cookie('username', userID);
+        res.redirect("/urls");
+      } else {
+        res.status(500).send("500 - There was an error on our end. Oops! Please try again.");
+      }
     } else {
-      res.status(500).send("500 - There was an error on our end. Oops! Please try again.");
+      res.status(400).send("400 - Bad Request. Email is already registered.")
     }
   } else {
-    res.status(400).send("400 - Bad Request. You must enter both a username and password.")
+    res.status(400).send("400 - Bad Request. You must enter both a username and password.");
   }
 });
 
