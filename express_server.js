@@ -1,10 +1,15 @@
+// express_server.js
+// declare requirements
 const express = require("express");
 const bodyParser = require("body-parser");
 const methodOverride = require("method-override");
-const app = express();
+const cookieParser = require("cookie-parser");
+
+// declare constants
 const PORT = process.env.PORT || 8080; // default port 8080
 const SHORTLEN = 6;
 
+// function to generate a randome alphanumeric string
 function generateRandomString(len) {
   let randString = "";
   const charset = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -16,14 +21,18 @@ function generateRandomString(len) {
   return randString;
 }
 
-app.set("view engine", "ejs");
-app.use(bodyParser.urlencoded({extended: true}));
-app.use(methodOverride('_method'));
-
+// our "database"
 var urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com",
 };
+
+// setup express and requirements
+const app = express();
+app.set("view engine", "ejs");
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(methodOverride('_method'));
+app.use(cookieParser());
 
 app.get("/", (req, res) => {
   res.end("Hello!");
@@ -34,12 +43,16 @@ app.get("/urls.json", (req, res) => {
 });
 
 app.get("/urls", (req, res) => {
-  let templateVars = { urls: urlDatabase };
+  let templateVars = {
+    urls: urlDatabase,
+    username: req.cookies["username"]
+  };
   res.render("urls_index", templateVars);
 });
 
 app.get("/urls/new", (req, res) => {
-  res.render("urls_new");
+  let templateVars = { username: req.cookies["username"] };
+  res.render("urls_new", templateVars);
 });
 
 app.post("/urls", (req, res) => {
@@ -51,7 +64,8 @@ app.post("/urls", (req, res) => {
 app.get("/urls/:id", (req, res) => {
   let templateVars = {
     shortURL: req.params.id,
-    fullURL: urlDatabase[req.params.id]
+    fullURL: urlDatabase[req.params.id],
+    username: req.cookies["username"]
   };
   res.render("urls_show", templateVars);
 });
@@ -83,6 +97,16 @@ app.get("/u/:shortURL", (req, res) => {
   } else {
     res.status(404).send('404 - URL not found!');
   }
+});
+
+app.post("/login", (req, res) => {
+  res.cookie('username', req.body.username);
+  res.redirect("/urls");
+});
+
+app.post("/logout", (req, res) => {
+  res.clearCookie('username');
+  res.redirect("/urls");
 });
 
 app.get("/hello", (req, res) => {
