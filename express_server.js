@@ -5,16 +5,11 @@ const bodyParser = require("body-parser");
 const methodOverride = require("method-override");
 const cookieParser = require("cookie-parser");
 const generateRandom = require("./generateRandom.js");
+const urlsDB = require("./urlsDB.js");
 
 // declare constants
 const PORT = process.env.PORT || 8080; // default port 8080
 const SHORTLEN = 6;
-
-// our "database"
-var urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com",
-};
 
 // setup express and requirements
 const app = express();
@@ -27,13 +22,13 @@ app.get("/", (req, res) => {
   res.end("Hello!");
 });
 
-app.get("/urls.json", (req, res) => {
-  res.json(urlDatabase);
-});
+// app.get("/urls.json", (req, res) => {
+//   res.json(urlDatabase);
+// });
 
 app.get("/urls", (req, res) => {
   let templateVars = {
-    urls: urlDatabase,
+    urls: urlsDB.getAll(),
     username: req.cookies["username"]
   };
   res.render("urls_index", templateVars);
@@ -46,22 +41,24 @@ app.get("/urls/new", (req, res) => {
 
 app.post("/urls", (req, res) => {
   const newShortURL = generateRandom.string(SHORTLEN);
-  urlDatabase[newShortURL] = req.body.longURL;
-  res.redirect(`/urls/${newShortURL}`);
+  if (urlsDB.add(newShortURL, req.body.longURL)) {
+    res.redirect(`/urls/${newShortURL}`);
+  } else {
+    res.status(500).send('500 - There was an error on our end. Oops! Please try again.');
+  }
 });
 
 app.get("/urls/:id", (req, res) => {
   let templateVars = {
     shortURL: req.params.id,
-    fullURL: urlDatabase[req.params.id],
+    fullURL: urlsDB.get(req.params.id),
     username: req.cookies["username"]
   };
   res.render("urls_show", templateVars);
 });
 
 app.delete("/urls/:id", (req, res) => {
-  if (urlDatabase[req.params.id]) {
-    delete urlDatabase[req.params.id];
+  if (urlsDB.delete(req.params.id)) {
     res.redirect("/urls");
   } else {
     res.status(404).send('404 - Could not remove item. Item was not found.');
@@ -69,8 +66,7 @@ app.delete("/urls/:id", (req, res) => {
 });
 
 app.put("/urls/:id", (req, res) => {
-  if (urlDatabase[req.params.id]) {
-    urlDatabase[req.params.id] = req.body.fullURL;
+  if (urlsDB.edit(req.params.id, req.body.fullURL)) {
     res.redirect("/urls");
   } else {
     res.status(404).send('404 - Could not modify item. Item was not found.');

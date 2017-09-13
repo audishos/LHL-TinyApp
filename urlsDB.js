@@ -1,5 +1,5 @@
 // our "database"
-var urlDatabase = {
+let urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com",
   getAll: function() {
@@ -12,10 +12,8 @@ var urlDatabase = {
     return all;
   },
   get: function(key) {
-    let data = {}
     if (this[key]) {
-      data[key] = this[key];
-      return data;
+      return this[key];
     } else {
       return null;
     }
@@ -46,10 +44,13 @@ var urlDatabase = {
   }
 };
 
-console.log(urlDatabase.getAll());
-console.log(urlDatabase.get("b2xVn2"));
-console.log(urlDatabase.add("b2xVn3", "https://www.reddit.com"));
-console.log(urlDatabase.edit("b2xVn2", "http://www.lhl.com"));
-console.log(urlDatabase.getAll());
-console.log(urlDatabase.delete("9sm5xK"));
-console.log(urlDatabase.getAll());
+module.exports = urlDatabase;
+
+// some tests
+// console.log(urlDatabase.getAll());
+// console.log(urlDatabase.get("b2xVn2"));
+// console.log(urlDatabase.add("b2xVn3", "https://www.reddit.com"));
+// console.log(urlDatabase.edit("b2xVn2", "http://www.lhl.com"));
+// console.log(urlDatabase.getAll());
+// console.log(urlDatabase.delete("9sm5xK"));
+// console.log(urlDatabase.getAll());
