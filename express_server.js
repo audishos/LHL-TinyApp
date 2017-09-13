@@ -31,13 +31,13 @@ app.get("/", (req, res) => {
 app.get("/urls", (req, res) => {
   let templateVars = {
     urls: urlsDB.getAll(),
-    user: usersDB.get(req.cookies.username)
+    user: usersDB.get(req.cookies.user)
   };
   res.render("urls_index", templateVars);
 });
 
 app.get("/urls/new", (req, res) => {
-  let templateVars = { user: usersDB.get(req.cookies.username) };
+  let templateVars = { user: usersDB.get(req.cookies.user) };
   res.render("urls_new", templateVars);
 });
 
@@ -55,7 +55,7 @@ app.get("/urls/:id", (req, res) => {
   let templateVars = {
     shortURL: req.params.id,
     fullURL: urlsDB.get(req.params.id),
-    user: usersDB.get(req.cookies.username)
+    user: usersDB.get(req.cookies.user)
   };
   res.render("urls_show", templateVars);
 });
@@ -94,7 +94,7 @@ app.get("/u/:shortURL", (req, res) => {
 // });
 
 app.post("/logout", (req, res) => {
-  res.clearCookie('username');
+  res.clearCookie('user');
   res.redirect("/urls");
 });
 
@@ -120,7 +120,7 @@ app.post("/register", (req, res) => {
       }
       if (usersDB.add(userID, user)) {
         res.status(201);
-        res.cookie('username', userID);
+        res.cookie('user', userID);
         res.redirect("/urls");
       } else {
         res.status(500).send("500 - There was an error on our end. Oops! Please try again.");
@@ -143,10 +143,10 @@ app.post("/login", (req, res) => {
     if (user) {
       if (user.password === req.body.password) {
         res.status(200);
-        res.cookie('username', user.id);
+        res.cookie('user', user.id);
         res.redirect("/urls");
       } else {
-        res.status(410).send("401 - Login failed");
+        res.status(401).send("401 - Login failed");
       }
     } else {
       res.status(404).send("404 - User not found.");
