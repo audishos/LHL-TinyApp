@@ -99,14 +99,7 @@ app.get("/register", (req, res) => {
 
 app.post("/register", (req, res) => {
   if (req.body.email && req.body.password) {
-    const existingUsers = usersDB.getAll();
-    let emailExists = false;
-    for (key in existingUsers) {
-      if (existingUsers[key].email === req.body.email) { // checks if email exists already
-        emailExists = true;
-      }
-    }
-    if (!emailExists) {
+    if (!usersDB.getByEmail(req.body.email)) {
       const userID = generateRandom.string(USERIDLEN)
       const user = {
         id: userID,
