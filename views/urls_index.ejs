@@ -12,11 +12,13 @@
         <tr>
           <td>http://localhost:8080/<%= key %></td>
           <td>(<%= urls[key] %>)</td>
+          <td><a href="#">Edit</a></td>
+          <td><form method="POST" action="/urls/<%= key %>?_method=DELETE"><input type="submit" value="Delete"></form></td>
         </tr>
         <% } %>
     </table>
 
     <h2>Create Short Link</h2>
-    <a href=<%= shortLink %>>Click here!</a>
+    <a href="/urls/new">Click here!</a>
 </body>
 </html>

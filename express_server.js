@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const methodOverride = require("method-override");
 const app = express();
 const PORT = process.env.PORT || 8080; // default port 8080
 const SHORTLEN = 6;
@@ -17,6 +18,7 @@ function generateRandomString(len) {
 
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(methodOverride('_method'));
 
 var urlDatabase = {
   "b2xVn2": "http://www.lighthouselabs.ca",
@@ -32,10 +34,7 @@ app.get("/urls.json", (req, res) => {
 });
 
 app.get("/urls", (req, res) => {
-  let templateVars = {
-    urls: urlDatabase,
-    shortLink: '#'
-  };
+  let templateVars = { urls: urlDatabase };
   res.render("urls_index", templateVars);
 });
 
@@ -55,6 +54,15 @@ app.get("/urls/:id", (req, res) => {
     fullURL: urlDatabase[req.params.id]
   };
   res.render("urls_show", templateVars);
+});
+
+app.delete("/urls/:id", (req, res) => {
+  if (urlDatabase[req.params.id]) {
+    delete  urlDatabase[req.params.id];
+    res.redirect("/urls");
+  } else {
+    res.status(404).send('404 - Could not remove item. Item was not found.');
+  }
 });
 
 app.get("/u/:shortURL", (req, res) => {
