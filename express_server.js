@@ -58,10 +58,19 @@ app.get("/urls/:id", (req, res) => {
 
 app.delete("/urls/:id", (req, res) => {
   if (urlDatabase[req.params.id]) {
-    delete  urlDatabase[req.params.id];
+    delete urlDatabase[req.params.id];
     res.redirect("/urls");
   } else {
     res.status(404).send('404 - Could not remove item. Item was not found.');
+  }
+});
+
+app.put("/urls/:id", (req, res) => {
+  if (urlDatabase[req.params.id]) {
+    urlDatabase[req.params.id] = req.body.fullURL;
+    res.redirect("/urls");
+  } else {
+    res.status(404).send('404 - Could not modify item. Item was not found.');
   }
 });
 

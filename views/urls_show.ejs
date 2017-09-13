@@ -7,8 +7,12 @@
 
   <% include ./partials/_header.ejs %>
 
-    <p>Full URL: <%= fullURL %></p>
-    <p>Short URL: http://localhost:8080/<%= shortURL %></p>
+    <h3>Short URL: <%= shortURL %></h3>
+
+    <form action="/urls/<%= shortURL %>?_method=PUT" method="POST" style="margin:150px;">
+      <input id="fullURL" type="text" name="fullURL" style="width: 300px" value="<%= fullURL %>">
+      <input type="submit" value="Update">
+    </form>
 
 </body>
 </html>
