@@ -13,10 +13,11 @@ const usersDB = require("./usersDB.js");
 
 // declare constants
 const PORT = process.env.PORT || 8080; // default port 8080
-const SHORTLEN = 6;
-const USERIDLEN = 6;
+const SHORTLEN = 6; // length of short URL string
+const USERIDLEN = 6; // length of user ID string
 
-function checkUser(req, res, next) { // middleware - checks if a user is logged in
+// middleware - checks if a user is logged in
+function checkUser(req, res, next) {
   const whiteList = ["/login", "/register"]; // don't need to be logged in for these routes
 
   if (whiteList.indexOf(req.path) > -1 || req.path.startsWith("/u/")) {
@@ -58,6 +59,7 @@ app.get("/", (req, res) => {
 //   res.json(urlDatabase);
 // });
 
+// urls list page
 app.get("/urls", (req, res) => {
   let templateVars = {
     urls: urlsDB.getByUserID(req.session.user_id),
@@ -66,6 +68,7 @@ app.get("/urls", (req, res) => {
   res.render("urls_index", templateVars);
 });
 
+// creating a new short url
 app.post("/urls", (req, res) => {
   const newShortURL = generateRandom.string(SHORTLEN);
   if (urlsDB.add(newShortURL, {shortURL: newShortURL, url: req.body.longURL, userID: req.session.user_id})) {
@@ -76,17 +79,21 @@ app.post("/urls", (req, res) => {
   }
 });
 
+// new short url page
 app.get("/urls/new", (req, res) => {
   let templateVars = { user: usersDB.get(req.session.user_id) };
   res.render("urls_new", templateVars);
 });
 
+// view/edit existing url page
 app.get("/urls/:id", (req, res) => {
+  // check that short url exists
   if (!urlsDB.get(req.params.id)) {
     res.status(404).send("404 - URL was not found.")
     return;
   }
 
+  // check that url belong to current user
   if (urlsDB.get(req.params.id).userID !== req.session.user_id) {
     res.status(403).send("403 - You do not own this short URL!");
     return;
@@ -99,7 +106,9 @@ app.get("/urls/:id", (req, res) => {
   res.render("urls_show", templateVars);
 });
 
+// deleting a short url
 app.delete("/urls/:id", (req, res) => {
+  // check that url belongs to current user
   if (urlsDB.get(req.params.id).userID !== req.session.user_id) {
     res.status(403).send("403 - You do not own this short URL!");
     return;
@@ -113,7 +122,9 @@ app.delete("/urls/:id", (req, res) => {
   }
 });
 
+// editing a short url
 app.put("/urls/:id", (req, res) => {
+  // check that url belongs to the current user
   if (urlsDB.get(req.params.id).userID !== req.session.user_id) {
     res.status(403).send("403 - You do not own this short URL!");
     return;
@@ -127,6 +138,7 @@ app.put("/urls/:id", (req, res) => {
   }
 });
 
+// directing user to the long url
 app.get("/u/:shortURL", (req, res) => {
   // gets longURL based on ':shortURL' route and key in urlDatabase
   if (urlsDB.get(req.params.shortURL)) {
