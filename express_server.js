@@ -17,7 +17,7 @@ const USERIDLEN = 6;
 function checkUser(req, res, next) { // middleware - checks if a user is logged in
   const whiteList = ["/login", "/register", "/u"]; // don't need to be logged in for these routes
 
-  if (whiteList.indexOf(req.path) > -1) {
+  if (whiteList.indexOf(req.path) > -1 || req.path.startsWith("/u/")) {
     next();
     return;
   }
