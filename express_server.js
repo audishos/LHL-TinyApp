@@ -4,6 +4,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const methodOverride = require("method-override");
 const cookieParser = require("cookie-parser");
+const morgan = require("morgan");
 const generateRandom = require("./generateRandom.js");
 const urlsDB = require("./urlsDB.js");
 const usersDB = require("./usersDB.js");
@@ -13,12 +14,31 @@ const PORT = process.env.PORT || 8080; // default port 8080
 const SHORTLEN = 6;
 const USERIDLEN = 6;
 
+function checkUser(req, res, next) { // middleware - checks if a user is logged in
+  const whiteList = ["/login", "/register", "/u"]; // don't need to be logged in for these routes
+
+  if (whiteList.indexOf(req.path) > -1) {
+    next();
+    return;
+  }
+
+  if (req.cookies.user) {
+    next();
+    return;
+  } else {
+    res.redirect("/login");
+    return;
+  }
+}
+
 // setup express and requirements
 const app = express();
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride('_method'));
 app.use(cookieParser());
+app.use(morgan('dev'));
+app.use(checkUser);
 
 app.get("/", (req, res) => {
   res.end("Hello!");
