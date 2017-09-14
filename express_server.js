@@ -72,6 +72,11 @@ app.get("/urls/new", (req, res) => {
 });
 
 app.get("/urls/:id", (req, res) => {
+  if (urlsDB.get(req.params.id).userID !== req.cookies.user) {
+    res.status(403).send("403 - You do not own this short URL!");
+    return;
+  }
+
   let templateVars = {
     url: urlsDB.get(req.params.id),
     user: usersDB.get(req.cookies.user)

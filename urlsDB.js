@@ -71,4 +71,4 @@ module.exports = urlDatabase;
 // console.log(urlDatabase.getAll());
 // console.log(urlDatabase.delete("9sm5xK"));
 // console.log(urlDatabase.getAll());
-console.log(urlDatabase.getByUserID("user2RandomID"));
+// console.log(urlDatabase.getByUserID("user2RandomID"));
