@@ -3,21 +3,21 @@ const urlDatabase = {
   "b2xVn2": {
     shortURL: "b2xVn2",
     url: "http://www.lighthouselabs.ca",
-    user: "userRandomID"
+    userID: "userRandomID"
   },
   "9sm5xK": {
     shortURL: "9sm5xK",
     url: "http://www.google.com",
-    user: "user2RandomID"
+    userID: "user2RandomID"
   },
   getAll: function() {
-    const all = {};
+    const urls = {};
     for (key in this) {
       if (typeof this[key] !== 'function') {
-        all[key] = this[key];
+        urls[key] = this[key];
       }
     }
-    return all;
+    return urls;
   },
   get: function(key) {
     if (this[key]) {
@@ -25,6 +25,15 @@ const urlDatabase = {
     } else {
       return null;
     }
+  },
+  getByUserID: function(userID) {
+    let urls = {};
+    for (key in this) {
+      if (this[key].userID === userID) {
+        urls[key] = this[key];
+      }
+    }
+    return urls;
   },
   add: function(key, value) {
     if (!this[key] && value) {
@@ -62,3 +71,4 @@ module.exports = urlDatabase;
 // console.log(urlDatabase.getAll());
 // console.log(urlDatabase.delete("9sm5xK"));
 // console.log(urlDatabase.getAll());
+console.log(urlDatabase.getByUserID("user2RandomID"));
