@@ -4,6 +4,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const methodOverride = require("method-override");
 const cookieParser = require("cookie-parser");
+const bcrypt = require("bcrypt");
 const morgan = require("morgan");
 const generateRandom = require("./generateRandom.js");
 const urlsDB = require("./urlsDB.js");
@@ -23,6 +24,7 @@ function checkUser(req, res, next) { // middleware - checks if a user is logged 
   }
 
   if (req.cookies.user) {
+    console.log(usersDB.get(req.cookies.user))
     next();
     return;
   } else {
@@ -138,7 +140,7 @@ app.post("/register", (req, res) => {
       const user = {
         id: userID,
         email: req.body.email,
-        password: req.body.password
+        password: bcrypt.hashSync(req.body.password, 10)
       }
       if (usersDB.add(userID, user)) {
         res.status(201);
@@ -163,7 +165,7 @@ app.post("/login", (req, res) => {
   if (req.body.email && req.body.password) {
     const user = usersDB.getByEmail(req.body.email);
     if (user) {
-      if (user.password === req.body.password) {
+      if (bcrypt.compareSync(req.body.password, user.password)) {
         res.status(200);
         res.cookie('user', user.id);
         res.redirect("/urls");
