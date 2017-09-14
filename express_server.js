@@ -113,10 +113,10 @@ app.put("/urls/:id", (req, res) => {
 });
 
 app.get("/u/:shortURL", (req, res) => {
-  // gets longURL base on ':shortURL' route and key in urlDatabase
+  // gets longURL based on ':shortURL' route and key in urlDatabase
   if (urlsDB.get(req.params.shortURL)) {
     res.status(302);
-    res.redirect(urlsDB.get(req.params.shortURL)); // redirects the page to the longURL
+    res.redirect(urlsDB.get(req.params.shortURL).url); // redirects the page to the longURL
   } else {
     res.status(404).send('404 - URL not found!');
   }
