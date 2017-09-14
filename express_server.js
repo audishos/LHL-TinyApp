@@ -89,7 +89,7 @@ app.delete("/urls/:id", (req, res) => {
 });
 
 app.put("/urls/:id", (req, res) => {
-  if (urlsDB.edit(req.params.id, req.body.fullURL)) {
+  if (urlsDB.edit(req.params.id, {shortURL: req.params.id, url: req.body.fullURL, userID: req.cookies.user})) {
     res.status(200);
     res.redirect("/urls");
   } else {
