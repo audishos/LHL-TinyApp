@@ -3,7 +3,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const methodOverride = require("method-override");
-const cookieParser = require("cookie-parser");
+// const cookieParser = require("cookie-parser");
+const cookieSession = require("cookie-session");
 const bcrypt = require("bcrypt");
 const morgan = require("morgan");
 const generateRandom = require("./generateRandom.js");
@@ -23,8 +24,7 @@ function checkUser(req, res, next) { // middleware - checks if a user is logged 
     return;
   }
 
-  if (req.cookies.user) {
-    console.log(usersDB.get(req.cookies.user))
+  if (req.session.user_id) {
     next();
     return;
   } else {
@@ -38,7 +38,14 @@ const app = express();
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride('_method'));
-app.use(cookieParser());
+// app.use(cookieParser());
+app.use(cookieSession({
+  name: 'session',
+  keys: [
+    'b370de14e94142d4a108a79df6d0e265a0ba3fa2e10f57c4b3a892b74c9f84aa',
+    '26cb941323ef3be96a33e7dec1a6e8e4a9075e3f55b4eb818a292c6ad368f0e9'
+  ]
+}));
 app.use(morgan('dev'));
 app.use(checkUser);
 
@@ -52,15 +59,15 @@ app.get("/", (req, res) => {
 
 app.get("/urls", (req, res) => {
   let templateVars = {
-    urls: urlsDB.getByUserID(req.cookies.user),
-    user: usersDB.get(req.cookies.user)
+    urls: urlsDB.getByUserID(req.session.user_id),
+    user: usersDB.get(req.session.user_id)
   };
   res.render("urls_index", templateVars);
 });
 
 app.post("/urls", (req, res) => {
   const newShortURL = generateRandom.string(SHORTLEN);
-  if (urlsDB.add(newShortURL, {shortURL: newShortURL, url: req.body.longURL, userID: req.cookies.user})) {
+  if (urlsDB.add(newShortURL, {shortURL: newShortURL, url: req.body.longURL, userID: req.session.user_id})) {
     res.status(201);
     res.redirect(`/urls/${newShortURL}`);
   } else {
@@ -69,25 +76,25 @@ app.post("/urls", (req, res) => {
 });
 
 app.get("/urls/new", (req, res) => {
-  let templateVars = { user: usersDB.get(req.cookies.user) };
+  let templateVars = { user: usersDB.get(req.session.user_id) };
   res.render("urls_new", templateVars);
 });
 
 app.get("/urls/:id", (req, res) => {
-  if (urlsDB.get(req.params.id).userID !== req.cookies.user) {
+  if (urlsDB.get(req.params.id).userID !== req.session.user_id) {
     res.status(403).send("403 - You do not own this short URL!");
     return;
   }
 
   let templateVars = {
     url: urlsDB.get(req.params.id),
-    user: usersDB.get(req.cookies.user)
+    user: usersDB.get(req.session.user_id)
   };
   res.render("urls_show", templateVars);
 });
 
 app.delete("/urls/:id", (req, res) => {
-  if (urlsDB.get(req.params.id).userID !== req.cookies.user) {
+  if (urlsDB.get(req.params.id).userID !== req.session.user_id) {
     res.status(403).send("403 - You do not own this short URL!");
     return;
   }
@@ -101,12 +108,12 @@ app.delete("/urls/:id", (req, res) => {
 });
 
 app.put("/urls/:id", (req, res) => {
-  if (urlsDB.get(req.params.id).userID !== req.cookies.user) {
+  if (urlsDB.get(req.params.id).userID !== req.session.user_id) {
     res.status(403).send("403 - You do not own this short URL!");
     return;
   }
 
-  if (urlsDB.edit(req.params.id, {shortURL: req.params.id, url: req.body.fullURL, userID: req.cookies.user})) {
+  if (urlsDB.edit(req.params.id, {shortURL: req.params.id, url: req.body.fullURL, userID: req.session.user_id})) {
     res.status(200);
     res.redirect("/urls");
   } else {
@@ -125,7 +132,7 @@ app.get("/u/:shortURL", (req, res) => {
 });
 
 app.post("/logout", (req, res) => {
-  res.clearCookie('user');
+  req.session = null;
   res.redirect("/urls");
 });
 
@@ -144,7 +151,7 @@ app.post("/register", (req, res) => {
       }
       if (usersDB.add(userID, user)) {
         res.status(201);
-        res.cookie('user', userID);
+        req.session.user_id = userID;
         res.redirect("/urls");
       } else {
         res.status(500).send("500 - There was an error on our end. Oops! Please try again.");
@@ -167,7 +174,7 @@ app.post("/login", (req, res) => {
     if (user) {
       if (bcrypt.compareSync(req.body.password, user.password)) {
         res.status(200);
-        res.cookie('user', user.id);
+        req.session.user_id = userID;
         res.redirect("/urls");
       } else {
         res.status(401).send("401 - Login failed");
