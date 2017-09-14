@@ -64,7 +64,6 @@ app.get("/urls/new", (req, res) => {
 app.post("/urls", (req, res) => {
   const newShortURL = generateRandom.string(SHORTLEN);
   if (urlsDB.add(newShortURL, {shortURL: newShortURL, url: req.body.longURL, user: req.cookies.user})) {
-    console.log(urlsDB.get(newShortURL));
     res.status(201);
     res.redirect(`/urls/${newShortURL}`);
   } else {
@@ -74,8 +73,7 @@ app.post("/urls", (req, res) => {
 
 app.get("/urls/:id", (req, res) => {
   let templateVars = {
-    shortURL: req.params.id,
-    fullURL: urlsDB.get(req.params.id),
+    url: urlsDB.get(req.params.id),
     user: usersDB.get(req.cookies.user)
   };
   res.render("urls_show", templateVars);

@@ -7,10 +7,10 @@
 
   <% include ./partials/_header.ejs %>
 
-    <h3>Short URL: <%= shortURL %></h3>
+    <h3>Short URL: <%= url.shortURL %></h3>
 
-    <form action="/urls/<%= shortURL %>?_method=PUT" method="POST">
-      <input id="fullURL" type="text" name="fullURL" value="<%= fullURL %>">
+    <form action="/urls/<%= url.shortURL %>?_method=PUT" method="POST">
+      <input id="fullURL" type="text" name="fullURL" value="<%= url.url %>">
       <input type="submit" value="Update">
     </form>
 
