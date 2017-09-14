@@ -1,4 +1,5 @@
 // express_server.js
+"use strict";
 // declare requirements
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -36,15 +37,15 @@ function checkUser(req, res, next) { // middleware - checks if a user is logged 
 const app = express();
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(methodOverride('_method'));
+app.use(methodOverride("_method"));
 app.use(cookieSession({
-  name: 'session',
+  name: "session",
   keys: [
-    'b370de14e94142d4a108a79df6d0e265a0ba3fa2e10f57c4b3a892b74c9f84aa',
-    '26cb941323ef3be96a33e7dec1a6e8e4a9075e3f55b4eb818a292c6ad368f0e9'
+    "b370de14e94142d4a108a79df6d0e265a0ba3fa2e10f57c4b3a892b74c9f84aa",
+    "26cb941323ef3be96a33e7dec1a6e8e4a9075e3f55b4eb818a292c6ad368f0e9"
   ]
 }));
-app.use(morgan('dev'));
+app.use(morgan("dev"));
 app.use(checkUser);
 
 app.get("/", (req, res) => {
@@ -69,7 +70,7 @@ app.post("/urls", (req, res) => {
     res.status(201);
     res.redirect(`/urls/${newShortURL}`);
   } else {
-    res.status(500).send('500 - There was an error on our end. Oops! Please try again.');
+    res.status(500).send("500 - There was an error on our end. Oops! Please try again.");
   }
 });
 
@@ -101,7 +102,7 @@ app.delete("/urls/:id", (req, res) => {
     res.status(200);
     res.redirect("/urls");
   } else {
-    res.status(404).send('404 - Could not remove item. Item was not found.');
+    res.status(404).send("404 - Could not remove item. Item was not found.");
   }
 });
 
@@ -115,7 +116,7 @@ app.put("/urls/:id", (req, res) => {
     res.status(200);
     res.redirect("/urls");
   } else {
-    res.status(404).send('404 - Could not modify item. Item was not found.');
+    res.status(404).send("404 - Could not modify item. Item was not found.");
   }
 });
 
@@ -125,7 +126,7 @@ app.get("/u/:shortURL", (req, res) => {
     res.status(302);
     res.redirect(urlsDB.get(req.params.shortURL).url); // redirects the page to the longURL
   } else {
-    res.status(404).send('404 - URL not found!');
+    res.status(404).send("404 - URL not found!");
   }
 });
 
@@ -141,12 +142,12 @@ app.get("/register", (req, res) => {
 app.post("/register", (req, res) => {
   if (req.body.email && req.body.password) {
     if (!usersDB.getByEmail(req.body.email)) {
-      const userID = generateRandom.string(USERIDLEN)
+      const userID = generateRandom.string(USERIDLEN);
       const user = {
         id: userID,
         email: req.body.email,
         password: bcrypt.hashSync(req.body.password, 10)
-      }
+      };
       if (usersDB.add(userID, user)) {
         res.status(201);
         req.session.user_id = userID;
@@ -155,7 +156,7 @@ app.post("/register", (req, res) => {
         res.status(500).send("500 - There was an error on our end. Oops! Please try again.");
       }
     } else {
-      res.status(400).send("400 - Bad Request. Email is already registered.")
+      res.status(400).send("400 - Bad Request. Email is already registered.");
     }
   } else {
     res.status(400).send("400 - Bad Request. You must enter both an email and password.");

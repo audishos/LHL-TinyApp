@@ -1,3 +1,4 @@
+"use strict";
 // our "database"
 const urlDatabase = {
   "b2xVn2": {
