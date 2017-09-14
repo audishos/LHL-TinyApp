@@ -1,7 +1,15 @@
 // our "database"
 const urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com",
+  "b2xVn2": {
+    shortURL: "b2xVn2",
+    url: "http://www.lighthouselabs.ca",
+    user: "userRandomID"
+  },
+  "9sm5xK": {
+    shortURL: "9sm5xK",
+    url: "http://www.google.com",
+    user: "user2RandomID"
+  },
   getAll: function() {
     const all = {};
     for (key in this) {
