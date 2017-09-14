@@ -13,8 +13,8 @@ const urlDatabase = {
   },
   getAll: function() {
     const urls = {};
-    for (key in this) {
-      if (typeof this[key] !== 'function') {
+    for (let key in this) {
+      if (typeof this[key] !== "function") {
         urls[key] = this[key];
       }
     }
@@ -29,7 +29,7 @@ const urlDatabase = {
   },
   getByUserID: function(userID) {
     let urls = {};
-    for (key in this) {
+    for (let key in this) {
       if (this[key].userID === userID) {
         urls[key] = this[key];
       }
@@ -38,6 +38,13 @@ const urlDatabase = {
   },
   add: function(key, value) {
     if (!this[key] && value) {
+      // convert url to lowercase
+      value.url = value.url.toLowerCase();
+      // add http:// to url if missing
+      if (!value.url.match(/^[a-z]+:\/\//))
+      {
+        value.url = "http://" + value.url;
+      }
       this[key] = value;
       return true;
     } else {
@@ -46,6 +53,13 @@ const urlDatabase = {
   },
   edit: function(key, value) {
     if (this[key] && value) {
+      // convert url to lowercase
+      value.url = value.url.toLowerCase();
+      // add http:// to url if missing
+      if (!value.url.match(/^[a-z]+:\/\//))
+      {
+        value.url = "http://" + value.url;
+      }
       this[key] = value;
       return true;
     } else {

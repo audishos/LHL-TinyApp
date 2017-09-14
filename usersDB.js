@@ -5,15 +5,15 @@ const users = {
     email: "user@example.com",
     password: "1234"
   },
- "user2RandomID": {
+  "user2RandomID": {
     id: "user2RandomID",
     email: "user2@example.com",
     password: "12345"
   },
   getAll: function() {
     const users = {};
-    for (key in this) {
-      if (typeof this[key] !== 'function') {
+    for (let key in this) {
+      if (typeof this[key] !== "function") {
         users[key] = this[key];
       }
     }
@@ -28,6 +28,8 @@ const users = {
   },
   add: function(key, value) {
     if (!this[key] && value) {
+      // convert email to lowercase
+      value.email = value.email.toLowerCase();
       this[key] = value;
       return true;
     } else {
@@ -36,6 +38,8 @@ const users = {
   },
   edit: function(key, value) {
     if (this[key] && value) {
+      // convert email to lowercase
+      value.email = value.email.toLowerCase();
       this[key] = value;
       return true;
     } else {
@@ -52,13 +56,13 @@ const users = {
   },
   getByEmail: function(email) {
     let user = null;
-    for (key in this) {
+    for (let key in this) {
       if (this[key].email === email) {
         user = this[key];
       }
     }
     return user;
   }
-}
+};
 
 module.exports = users;
