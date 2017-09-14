@@ -10,11 +10,13 @@ const morgan = require("morgan");
 const generateRandom = require("./generateRandom.js");
 const urlsDB = require("./urlsDB.js");
 const usersDB = require("./usersDB.js");
+const analyticsDB = require("./analyticsDB.js");
 
 // declare constants
 const PORT = process.env.PORT || 8080; // default port 8080
 const SHORTLEN = 6; // length of short URL string
 const USERIDLEN = 6; // length of user ID string
+const VISITORIDLEN = 6; // length of visitor ID string
 
 // middleware - checks if a user is logged in
 function checkUser(req, res, next) {
@@ -142,6 +144,14 @@ app.put("/urls/:id", (req, res) => {
 app.get("/u/:shortURL", (req, res) => {
   // gets longURL based on ':shortURL' route and key in urlDatabase
   if (urlsDB.get(req.params.shortURL)) {
+    if (!req.session.visitor_id) {
+      req.session.visitor_id = generateRandom(VISITORIDLEN);
+    }
+    analyticsDB.add({
+      timestamp: Date.now(),
+      shortURL: req.params.shortURL,
+      visitorID: req.session.visitor_id,
+    });
     res.status(302);
     res.redirect(urlsDB.get(req.params.shortURL).url); // redirects the page to the longURL
   } else {
@@ -150,7 +160,7 @@ app.get("/u/:shortURL", (req, res) => {
 });
 
 app.post("/logout", (req, res) => {
-  req.session = null;
+  req.session.user_id = null;
   res.redirect("/urls");
 });
 
