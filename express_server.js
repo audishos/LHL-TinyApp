@@ -50,25 +50,25 @@ app.get("/", (req, res) => {
 
 app.get("/urls", (req, res) => {
   let templateVars = {
-    urls: urlsDB.getAll(),
+    urls: urlsDB.getByUserID(req.cookies.user),
     user: usersDB.get(req.cookies.user)
   };
   res.render("urls_index", templateVars);
 });
 
-app.get("/urls/new", (req, res) => {
-  let templateVars = { user: usersDB.get(req.cookies.user) };
-  res.render("urls_new", templateVars);
-});
-
 app.post("/urls", (req, res) => {
   const newShortURL = generateRandom.string(SHORTLEN);
-  if (urlsDB.add(newShortURL, {shortURL: newShortURL, url: req.body.longURL, user: req.cookies.user})) {
+  if (urlsDB.add(newShortURL, {shortURL: newShortURL, url: req.body.longURL, userID: req.cookies.user})) {
     res.status(201);
     res.redirect(`/urls/${newShortURL}`);
   } else {
     res.status(500).send('500 - There was an error on our end. Oops! Please try again.');
   }
+});
+
+app.get("/urls/new", (req, res) => {
+  let templateVars = { user: usersDB.get(req.cookies.user) };
+  res.render("urls_new", templateVars);
 });
 
 app.get("/urls/:id", (req, res) => {
