@@ -10,8 +10,8 @@
     <table>
       <% for (let key in urls) { %>
         <tr>
-          <td>http://localhost:8080/<%= urls[key].shortURL %></td>
-          <td>(<%= urls[key].url %>)</td>
+          <td><a href="http://localhost:8080/u/<%= urls[key].shortURL %>">http://localhost:8080/u/<%= urls[key].shortURL %></a></td>
+          <td><a href="<%= urls[key].url %>">(<%= urls[key].url %>)</a></td>
           <td><form method="GET" action="/urls/<%= key %>"><input type="submit" value="Edit"></form></td>
           <td><form method="POST" action="/urls/<%= key %>?_method=DELETE"><input type="submit" value="Delete"></form></td>
         </tr>
