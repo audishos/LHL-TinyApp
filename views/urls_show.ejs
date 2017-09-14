@@ -1,17 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <title>TinyApp</title>
-</head>
+<% include partials/_head %>
 <body>
 
-  <% include ./partials/_header.ejs %>
+  <% include partials/_banner %>
+  <% include ./partials/_header %>
 
-    <h3>Short URL: <%= url.shortURL %></h3>
+    <h3>Short URL: <a href="http://localhost:8080/u/<%= url.shortURL %>">http://localhost:8080/u/<%= url.shortURL %></a></h3>
 
     <form action="/urls/<%= url.shortURL %>?_method=PUT" method="POST">
       <input id="fullURL" type="text" name="fullURL" value="<%= url.url %>">
-      <input type="submit" value="Update">
+      <input class="submit" type="submit" value="Update">
     </form>
 
 </body>

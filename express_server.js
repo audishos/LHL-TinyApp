@@ -37,6 +37,8 @@ function checkUser(req, res, next) { // middleware - checks if a user is logged 
 const app = express();
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({extended: true}));
+app.use("/styles",express.static(__dirname + "/styles"));
+app.use("/images",express.static(__dirname + "/images"));
 app.use(methodOverride("_method"));
 app.use(cookieSession({
   name: "session",
@@ -173,7 +175,7 @@ app.post("/login", (req, res) => {
     if (user) {
       if (bcrypt.compareSync(req.body.password, user.password)) {
         res.status(200);
-        req.session.user_id = userID;
+        req.session.user_id = user.id;
         res.redirect("/urls");
       } else {
         res.status(401).send("401 - Login failed");

@@ -1,0 +1,86 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  color: white;
+  background-color: #0E93FF;
+  text-align: center;
+}
+
+input { font-family: 'Roboto', sans-serif; }
+
+#banner {
+  width: 100%;
+  background-image: url(/images/banner.png);
+  height: 200px;
+  background-color: purple;
+  background-position: center;
+}
+
+.input-form {
+  display: inline-block;
+  text-align: right;
+  padding: 20px;
+}
+
+.user-area {
+  text-align: right;
+}
+
+/* #urls-container {
+
+} */
+
+.url-line {
+  padding: 10px;
+}
+
+.url-short {
+  display: inline-block;
+
+}
+
+.url-long {
+  display: inline-block;
+
+}
+
+.url-actions {
+}
+
+.url-actions form {
+  display: inline;
+}
+
+a:link {
+  color: #B0FFC5;
+  text-decoration: none;
+}
+
+a:visited {
+  color: #B0FFC5;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+a:active {
+
+}
+
+input {
+  margin: 10px;
+}
+
+.submit {
+  background-color: #e7e7e7;
+  border: none;
+  color: black;
+  padding: 5px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}

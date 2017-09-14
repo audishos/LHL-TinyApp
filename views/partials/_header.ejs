@@ -1,14 +1,17 @@
-<%  if (user) {
-%><div><%= user.email %></div>
+<%  if (user) { %>
+<div class="user-area">
 <form action="/logout" method="POST">
-  <input type="submit" value="Sign Out">
+  <%= user.email %>
+  <input class="submit" type="submit" value="Sign Out">
 </form>
+</div>
 <%  } else { %>
+<div class="user-area">
 <form action="/login" method="GET">
-  <input type="submit" value="Sign In">
+  <input class="submit" type="submit" value="Sign In">
 </form>
 <form action="/register" method="GET">
-  <input type="submit" value="Register">
+  <input class="submit" type="submit" value="Register">
 </form>
+</div>
 <%  } %>
-<h1>TinyApp URL Shortener</h1>
