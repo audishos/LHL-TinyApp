@@ -63,7 +63,8 @@ app.get("/urls/new", (req, res) => {
 
 app.post("/urls", (req, res) => {
   const newShortURL = generateRandom.string(SHORTLEN);
-  if (urlsDB.add(newShortURL, req.body.longURL)) {
+  if (urlsDB.add(newShortURL, {shortURL: newShortURL, url: req.body.longURL, user: req.cookies.user})) {
+    console.log(urlsDB.get(newShortURL));
     res.status(201);
     res.redirect(`/urls/${newShortURL}`);
   } else {
