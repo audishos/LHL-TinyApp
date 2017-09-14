@@ -85,6 +85,11 @@ app.get("/urls/:id", (req, res) => {
 });
 
 app.delete("/urls/:id", (req, res) => {
+  if (urlsDB.get(req.params.id).userID !== req.cookies.user) {
+    res.status(403).send("403 - You do not own this short URL!");
+    return;
+  }
+
   if (urlsDB.delete(req.params.id)) {
     res.status(200);
     res.redirect("/urls");
@@ -94,6 +99,11 @@ app.delete("/urls/:id", (req, res) => {
 });
 
 app.put("/urls/:id", (req, res) => {
+  if (urlsDB.get(req.params.id).userID !== req.cookies.user) {
+    res.status(403).send("403 - You do not own this short URL!");
+    return;
+  }
+
   if (urlsDB.edit(req.params.id, {shortURL: req.params.id, url: req.body.fullURL, userID: req.cookies.user})) {
     res.status(200);
     res.redirect("/urls");
