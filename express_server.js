@@ -171,7 +171,11 @@ app.post("/logout", (req, res) => {
 });
 
 app.get("/register", (req, res) => {
-  res.render("register");
+  if (req.session.user_id && usersDB.get(req.session.user_id)) {
+    res.redirect("/urls");
+  } else {
+    res.render("register");
+  }
 });
 
 app.post("/register", (req, res) => {
@@ -199,7 +203,11 @@ app.post("/register", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-  res.render("login");
+  if (req.session.user_id && usersDB.get(req.session.user_id)) {
+    res.redirect("/urls");
+  } else {
+    res.render("login");
+  }
 });
 
 app.post("/login", (req, res) => {
