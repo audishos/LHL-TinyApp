@@ -3,12 +3,12 @@ const users = {
   "userRandomID": {
     id: "userRandomID",
     email: "user@example.com",
-    password: "1234"
+    password: "$2a$06$LSZ1UKBosn6Vz70XO9hTfe9FDXwFo3TN6PQ6rFYVHbWXC6NpD7qkK"
   },
   "user2RandomID": {
     id: "user2RandomID",
     email: "user2@example.com",
-    password: "12345"
+    password: "$2a$06$LSZ1UKBosn6Vz70XO9hTfe9FDXwFo3TN6PQ6rFYVHbWXC6NpD7qkK"
   },
   getAll: function() {
     const users = {};

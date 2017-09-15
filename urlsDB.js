@@ -6,6 +6,21 @@ const urlDatabase = {
     url: "http://www.lighthouselabs.ca",
     userID: "userRandomID"
   },
+  "hd92kd": {
+    shortURL: "hd92kd",
+    url: "https://www.reddit.com",
+    userID: "userRandomID"
+  },
+  "H2nsH5": {
+    shortURL: "H2nsH5",
+    url: "https://inbox.google.com",
+    userID: "userRandomID"
+  },
+  "HJS91A": {
+    shortURL: "HJS91A",
+    url: "https://www.netflix.com",
+    userID: "userRandomID"
+  },
   "9sm5xK": {
     shortURL: "9sm5xK",
     url: "http://www.google.com",

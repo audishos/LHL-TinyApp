@@ -45,8 +45,8 @@ input { font-family: 'Roboto', sans-serif; }
 
 }
 
-.url-actions {
-}
+/* .url-actions {
+} */
 
 .url-actions form {
   display: inline;
@@ -94,10 +94,6 @@ a:visited {
 
 a:hover {
   text-decoration: underline;
-}
-
-a:active {
-
 }
 
 input {
