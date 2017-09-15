@@ -31,6 +31,8 @@ You should see the following: `Tiny App listening on port 8080!`
 
 then simply navigate to `http://localhost:8080` (this redirects to `http://localhost:8080/urls`) and login or register.
 
+There are 2 mock users by default: `user@example.com:1234` and `user2@example.com:1234`
+
 Have fun!
 
 ## Additional Info
