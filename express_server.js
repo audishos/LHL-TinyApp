@@ -235,10 +235,6 @@ app.post("/login", (req, res) => {
   }
 });
 
-app.get("/hello", (req, res) => {
-  res.end("<html><body>Hello <b>World</b></body></html>\n");
-});
-
 app.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}!`);
+  console.log(`Tiny App listening on port ${PORT}!`);
 });
