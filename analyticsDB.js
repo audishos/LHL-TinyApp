@@ -1,23 +1,8 @@
 "use strict";
 
 const analytics = {
-  1505478069628: {
-    timestamp: new Date(1505478069628),
-    shortURL: "b2xVn2",
-    visitorID: "ks93jd"
-  },
-  1505468069628: {
-    timestamp: new Date(1505628069628),
-    shortURL: "b2xVn2",
-    visitorID: "ks93jd"
-  },
-  1505458069628: {
-    timestamp: new Date(1505458069628),
-    shortURL: "b2xVn2",
-    visitorID: "ks93jd"
-  },
-  1505448069628: {
-    timestamp: new Date(1505448069628),
+  1505428069628: {
+    timestamp: new Date(1505428069628),
     shortURL: "b2xVn2",
     visitorID: "ks93jd"
   },
@@ -26,8 +11,23 @@ const analytics = {
     shortURL: "b2xVn2",
     visitorID: "82nfdR"
   },
-  1505428069628: {
-    timestamp: new Date(1505428069628),
+  1505448069628: {
+    timestamp: new Date(1505448069628),
+    shortURL: "b2xVn2",
+    visitorID: "ks93jd"
+  },
+  1505458069628: {
+    timestamp: new Date(1505458069628),
+    shortURL: "b2xVn2",
+    visitorID: "18HA8u"
+  },
+  1505468069628: {
+    timestamp: new Date(1505628069628),
+    shortURL: "b2xVn2",
+    visitorID: "ks93jd"
+  },
+  1505478069628: {
+    timestamp: new Date(1505478069628),
     shortURL: "b2xVn2",
     visitorID: "ks93jd"
   },
