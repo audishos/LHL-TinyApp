@@ -56,7 +56,7 @@ app.use(morgan("dev"));
 app.use(checkUser);
 
 app.get("/", (req, res) => {
-  res.end("Hello!");
+  res.redirect("/urls");
 });
 
 app.get("/urls.json", (req, res) => {
@@ -160,7 +160,8 @@ app.get("/u/:shortURL", (req, res) => {
     res.status(302);
     res.redirect(urlsDB.get(req.params.shortURL).url); // redirects the page to the longURL
   } else {
-    res.status(404).send("404 - URL not found!");
+    res.status(404);
+    res.render("u_404");
   }
 });
 
