@@ -103,7 +103,9 @@ app.get("/urls/:id", (req, res) => {
 
   let templateVars = {
     url: urlsDB.get(req.params.id),
-    user: usersDB.get(req.session.user_id)
+    user: usersDB.get(req.session.user_id),
+    visitorCount: analyticsDB.getVisitorCount(req.params.id),
+    analytics: analyticsDB.getAnalytics(req.params.id)
   };
   res.render("urls_show", templateVars);
 });
@@ -145,10 +147,11 @@ app.get("/u/:shortURL", (req, res) => {
   // gets longURL based on ':shortURL' route and key in urlDatabase
   if (urlsDB.get(req.params.shortURL)) {
     if (!req.session.visitor_id) {
-      req.session.visitor_id = generateRandom(VISITORIDLEN);
+      req.session.visitor_id = generateRandom.string(VISITORIDLEN);
     }
+    let now = new Date(Date.now());
     analyticsDB.add({
-      timestamp: Date.now(),
+      timestamp: now,
       shortURL: req.params.shortURL,
       visitorID: req.session.visitor_id,
     });

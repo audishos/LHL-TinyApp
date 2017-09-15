@@ -49,6 +49,16 @@ const analytics = {
       }
     }
     return visitorCount;
+  },
+  getAnalytics: function(shortURL) {
+    let analytics = {};
+    for (let key in this) {
+      if (typeof this[key] !== "function" &&
+        this[key].shortURL === shortURL) {
+        analytics[key] = this[key];
+      }
+    }
+    return analytics;
   }
 };
 

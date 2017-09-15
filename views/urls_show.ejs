@@ -6,12 +6,26 @@
   <% include partials/_banner %>
   <% include ./partials/_header %>
 
-    <h3>Short URL: <a href="http://localhost:8080/u/<%= url.shortURL %>">http://localhost:8080/u/<%= url.shortURL %></a></h3>
+    <div id="edit-url">
+      <h3>Short URL: <a href="http://localhost:8080/u/<%= url.shortURL %>">http://localhost:8080/u/<%= url.shortURL %></a></h3>
 
-    <form action="/urls/<%= url.shortURL %>?_method=PUT" method="POST">
-      <input id="fullURL" type="text" name="fullURL" value="<%= url.url %>">
-      <input class="submit" type="submit" value="Update">
-    </form>
-
+      <form action="/urls/<%= url.shortURL %>?_method=PUT" method="POST">
+        <input id="fullURL" type="text" name="fullURL" value="<%= url.url %>">
+        <input class="submit" type="submit" value="Update">
+      </form>
+    </div>
+    <div id="url-analytics">
+      <h2>Statistics</h2>
+      <div id="visitors">
+        <p>Unique Visitors: <%= visitorCount.unique %></p>
+        <p>Total Visitors: <%= visitorCount.total %></p>
+      </div>
+      <% for (key in analytics) { %>
+      <div class="analytic">
+        <p>Date & Time: <%= analytics[key].timestamp.toLocaleString(); %></p>
+        <p>Visitor ID: <%= analytics[key].visitorID %></p>
+      </div>
+      <% } %>
+    </div>
 </body>
 </html>
