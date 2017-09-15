@@ -174,7 +174,7 @@ app.get("/register", (req, res) => {
   if (req.session.user_id && usersDB.get(req.session.user_id)) {
     res.redirect("/urls");
   } else {
-    res.render("register");
+    res.render("register", { error: "" });
   }
 });
 
@@ -192,13 +192,16 @@ app.post("/register", (req, res) => {
         req.session.user_id = userID;
         res.redirect("/urls");
       } else {
-        res.status(500).send("500 - There was an error on our end. Oops! Please try again.");
+        res.status(500);
+        res.render("register", { error: "There was an error on our end. Oops! Please try again." });
       }
     } else {
-      res.status(400).send("400 - Bad Request. Email is already registered.");
+      res.status(400);
+      res.render("register", { error: "Email is already registered." });
     }
   } else {
-    res.status(400).send("400 - Bad Request. You must enter both an email and password.");
+    res.status(400);
+    res.render("register", { error: "Please enter both an email and a password!" });
   }
 });
 
@@ -206,7 +209,7 @@ app.get("/login", (req, res) => {
   if (req.session.user_id && usersDB.get(req.session.user_id)) {
     res.redirect("/urls");
   } else {
-    res.render("login");
+    res.render("login", { error: "" });
   }
 });
 
@@ -219,13 +222,16 @@ app.post("/login", (req, res) => {
         req.session.user_id = user.id;
         res.redirect("/urls");
       } else {
-        res.status(401).send("401 - Login failed");
+        res.status(401);
+        res.render("login", { error: "Login Failed" });
       }
     } else {
-      res.status(404).send("404 - User not found.");
+      res.status(404);
+      res.render("login", { error: "Login Failed" });
     }
   } else {
-    res.status(400).send("400 - Bad Request. You must enter both an email and password.");
+    res.status(400);
+    res.render("login", { error: "Please enter both an email and a password!" });
   }
 });
 

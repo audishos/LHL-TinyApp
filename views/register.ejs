@@ -15,6 +15,9 @@
       <input class="submit" type="submit" value="Register">
     </form>
   </div>
+  <% if (error) { %>
+    <p style="color: #d30a0a;"><%= error %></p>
+    <% } %>
   <p>Already have an account? <a href="/login">Sign In</a></p>
 </body>
 </html>
