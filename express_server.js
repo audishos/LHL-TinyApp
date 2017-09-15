@@ -57,9 +57,9 @@ app.get("/", (req, res) => {
   res.end("Hello!");
 });
 
-// app.get("/urls.json", (req, res) => {
-//   res.json(urlDatabase);
-// });
+app.get("/urls.json", (req, res) => {
+  res.json(urlsDB);
+});
 
 // urls list page
 app.get("/urls", (req, res) => {
