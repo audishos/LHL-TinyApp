@@ -27,10 +27,12 @@ function checkUser(req, res, next) {
     return;
   }
 
-  if (req.session.user_id) {
+  // check for user_id cookie and verify the user exists
+  if (req.session.user_id && usersDB.get(req.session.user_id)) {
     next();
     return;
   } else {
+    req.session.user_id = null;
     res.redirect("/login");
     return;
   }
