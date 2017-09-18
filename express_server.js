@@ -93,7 +93,7 @@ app.get("/urls/new", (req, res) => {
 app.get("/urls/:id", (req, res) => {
   // check that short url exists
   if (!urlsDB.get(req.params.id)) {
-    res.status(404).send("404 - URL was not found.")
+    res.status(404).send("404 - URL was not found.");
     return;
   }
 
